@@ -1,0 +1,152 @@
+<div class="row" *ngIf="!pagando && mostrar"> 
+  <div class="col-md-6 col-xxxl-4" style="display:block; margin:auto">
+    <nb-card>
+      <nb-card-header>
+        Info!
+      </nb-card-header>
+      <nb-card-body>
+        <div class="alert alert-primary" role="alert">
+          <strong>No hay deuda con el establecimiento {{establecimiento_nom}} en los últimos 30 días.</strong>
+        </div>
+        
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
+
+<div class="pagando" *ngIf="pagando">
+  <div class="row">
+    <div class="col-md-12">
+      <nb-card>
+        <nb-card-header>
+          Detalles de la deuda
+        </nb-card-header>
+        <nb-card-body>
+
+          <h5 class="grid-h">Deuda total</h5>
+          <div class="row show-grid">
+
+            <div class="col-md-4">
+              <div>Monto <small>($ MXN)</small></div>
+            </div>
+            <div class="col-md-8">
+              <div>{{total_deuda}}</div>
+            </div>
+
+          </div>
+
+          <h5 class="grid-h">Pedidos</h5>
+          <div *ngFor="let pedido of pedidos">
+
+            <div class="row show-grid">
+
+              <div class="col-md-4">
+                <div>Pedido</div>
+              </div>
+              <div class="col-md-8">
+                <div>AI00{{pedido.id}}</div>
+              </div>
+
+              <div class="col-md-4">
+                <div>Fecha - Hora</div>
+              </div>
+              <div class="col-md-8">
+                <div>{{pedido.created_at | date:'dd/MM/yyyy'}} - {{pedido.created_at | date:'HH:mm:ss'}}</div>
+              </div>
+
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>
+                     Producto
+                    </th>
+                    <th>
+                     Solicitados
+                    </th>
+                    <th>
+                     Precio Unit. <small>($ MXN)</small>
+                    </th>
+                    <th>
+                     Sub-total <small>($ MXN)</small>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let producto of pedido.productos">
+                       <td class="text-center">
+                         {{producto.nombre}}
+                       </td>
+                       <td class="text-center">
+                         {{producto.pivot.cantidad}}
+                       </td>
+                       <td class="text-center">
+                         {{producto.pivot.precio_unitario}}
+                       </td>
+                       <td class="text-center">
+                         {{producto.pivot.precio_unitario * producto.pivot.cantidad}}
+                       </td>
+                     </tr>
+                     
+                     <tr>
+                       <td colspan="4"></td>
+                     </tr>
+                     <tr>
+                       <td colspan="3" style="text-align: right;"><strong>Total</strong> <small>($ MXN)</small></td>
+                       <td class="text-center">{{pedido.total_pedido}}</td>
+                     </tr> 
+                     <!-- <tr>
+                       <td colspan="3" style="text-align: right;"><strong>Cancelar</strong></td>
+                       <td class="text-center"><nb-checkbox [value]="false" (change)="addPago(pedido)">{{pedido.cancelar}}</nb-checkbox></td>
+                     </tr> -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- <h5 class="grid-h">Monto a cancelar</h5>
+          <div class="row show-grid">
+          
+            <div class="col-md-4">
+              <div>Monto <small>($ MXN)</small></div>
+            </div>
+            <div class="col-md-8">
+              <div>{{cancelar_monto}}</div>
+            </div>
+          
+          </div> -->
+
+        </nb-card-body>
+        <!-- <nb-card-footer>
+          <button  class="btn btn-tn btn-secondary" (click)="atras()"><i class="fa fa-arrow-left"></i> Atrás</button>
+          <button  class="btn btn-tn btn-info pull-right" style="margin-right:15px;" (click)="confirmarPago(modal1)" [disabled]="cancelar_monto == 0">Generar Pago</button>
+        </nb-card-footer> -->
+      </nb-card>
+    </div>
+  </div>
+</div>
+
+<ng-template #modal1 let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Confirmar Pago: </h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>¿Realmente desea generar un pago para el establecimiento {{selectedObj.nombre}}?</p>
+    <p><strong>Monto</strong> = $ MXN {{cancelar_monto}}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Cancelar</button>
+    <button type="button" class="btn btn-danger" (click)="c('Close click'); registrarPago()">Aceptar</button>
+  </div>
+</ng-template>
+
+<toaster-container [toasterconfig]="config"></toaster-container>
+
+<div class="my-container">
+    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
+</div>

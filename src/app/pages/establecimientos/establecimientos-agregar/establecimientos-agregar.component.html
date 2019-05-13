@@ -1,0 +1,233 @@
+<div class="row">
+  <div class="col-lg-6" style="display:block; margin:auto">
+    <nb-card>
+      <nb-card-header>Registro de Nuevo Establecimiento</nb-card-header>
+      <nb-card-body>
+        <form [formGroup]="myFormAgregar" novalidate>
+          <div class="form-group">
+            <label for="exampleInputNombre">Nombre</label>
+            <input type="text" class="form-control" id="exampleInputNombre" placeholder="Nombre" formControlName="nombre">
+            <div *ngIf="myFormAgregar.get('nombre').errors && myFormAgregar.get('nombre').dirty">
+              <p *ngIf="myFormAgregar.get('nombre').hasError('required')">Nombre es requerido</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail">Email</label>
+            <input type="email" class="form-control" id="exampleInputEmail" placeholder="Email" formControlName="email">
+            <div *ngIf="myFormAgregar.get('email').errors && myFormAgregar.get('email').dirty">
+              <p *ngIf="myFormAgregar.get('email').hasError('required')">Email es requerido</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword">Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword" placeholder="Password" formControlName="password">
+            <div *ngIf="myFormAgregar.get('password').errors && myFormAgregar.get('password').dirty">
+              <p *ngIf="myFormAgregar.get('password').hasError('required')">Password es requerido</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword2">Confirmar Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password" formControlName="password2">
+            <div *ngIf="myFormAgregar.get('password2').errors && myFormAgregar.get('password2').dirty">
+              <p *ngIf="myFormAgregar.get('password2').hasError('required')">Password es requerido</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputTelefono">Teléfono</label>
+            <input type="text" class="form-control" id="exampleInputTelefono" placeholder="Telefono" formControlName="telefono">
+            <div *ngIf="myFormAgregar.get('telefono').errors && myFormAgregar.get('telefono').dirty">
+              <p *ngIf="myFormAgregar.get('telefono').hasError('required')">Teléfono es requerido</p>
+            </div>
+          </div>
+          <div *ngIf="estados" class="form-group">
+            <label for="exampleInputEstado">Estado</label>
+            <select class="form-control" id="exampleInputEstado" formControlName="estado_geo"
+            (change)="setEstado2($event.target.value)">
+              <!-- <option disabled selected>Selecciona una categoría</option> -->
+              <option *ngFor="let estado of estados" [value]="estado.nom_ent">{{estado.nom_ent}}</option>
+            </select>
+          </div>
+          <div *ngIf="estados" class="form-group">
+            <label for="exampleInputCiudad">Ciudad</label>
+            <select class="form-control" id="exampleInputCiudad" formControlName="ciudad">
+              <!-- <option disabled selected>Selecciona una categoría</option> -->
+              <option *ngFor="let ciudad of ciudades" [value]="ciudad.nom_mun">{{ciudad.nom_mun}}</option>
+            </select>
+          </div>
+          
+          <!-- <div class="form-group">
+            <label for="exampleInputDireccion">Dirección</label>
+            <input type="text" class="form-control" id="exampleInputDireccion" placeholder="Dirección" formControlName="direccion">
+            <div *ngIf="myFormAgregar.get('direccion').errors && myFormAgregar.get('direccion').dirty">
+              <p *ngIf="myFormAgregar.get('direccion').hasError('required')">Dirección es requerido</p>
+            </div>
+          </div> 
+          <div class="form-group">
+            <label for="exampleInputlat">lat</label>
+            <input type="text" class="form-control" id="exampleInputDireccion" placeholder="lat" formControlName="lat">
+            <div *ngIf="myFormAgregar.get('lat').errors && myFormAgregar.get('lat').dirty">
+              <p *ngIf="myFormAgregar.get('lat').hasError('required')">lat es requerido</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputlat">lng</label>
+            <input type="text" class="form-control" id="exampleInputDireccion" placeholder="lng" formControlName="lng">
+            <div *ngIf="myFormAgregar.get('lng').errors && myFormAgregar.get('lng').dirty">
+              <p *ngIf="myFormAgregar.get('lng').hasError('required')">lng es requerido</p>
+            </div>
+          </div> -->
+
+          <div class="form-group">
+            <label for="exampleInputDireccion">Dirección</label>
+            <input type="text" name="direccion" class="form-control" id="exampleInputDireccion" placeholder="Dirección" formControlName="direccion" (blur)="setDireccion()">
+            <div *ngIf="myFormAgregar.get('direccion').errors && myFormAgregar.get('direccion').dirty">
+              <p *ngIf="myFormAgregar.get('direccion').hasError('required')">Dirección es requerido</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+                <input placeholder="Buscar dirección por google maps..." autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search  onFocus="geolocate()" >
+            </div>
+          </div>
+          
+          <br>
+          <div class="row">  
+            <div class="col-md-12">
+                <agm-map style="height: 300px;" [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+                  <agm-marker style="height: 300px;" [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true" (dragEnd)="markerDragEnd($event)"></agm-marker>
+                </agm-map>
+            </div>   
+          </div>
+          <br>
+          <h4>Horario:</h4>
+          <br>
+          <div class="row">  
+            <strong style="text-align: center;width: 100%;">Lunes</strong><br>
+          </div> 
+          <div class="row">
+            <div class="col-md-6">
+              <strong style="text-align: left;width: 100%;">Inicio:</strong>
+              <select class="form-control" id="exampleInputEstado" formControlName="lunes_i" (change)="setLunes($event.target.value)"
+              >
+                <option *ngFor="let h of horas" [value]="h.h">{{h.h}}</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <strong style="text-align: left;width: 100%;">Fin:</strong>
+              <select class="form-control" id="exampleInputEstado" formControlName="lunes_f">
+                <option *ngFor="let h of horas" [value]="h.h">{{h.h}}</option>
+              </select>
+            </div>   
+          </div> 
+          <div class="row">  
+            <strong style="text-align: center;width: 100%;">Martes</strong><br>
+          </div> 
+          <div class="row">
+            <div class="col-md-6">
+              <strong style="text-align: left;width: 100%;">Inicio:</strong>
+              <select class="form-control" id="exampleInputEstado" formControlName="martes_i">
+                <option *ngFor="let h of horas" [value]="h.h">{{h.h}}</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <strong style="text-align: left;width: 100%;">Fin:</strong>
+              <select class="form-control" id="exampleInputEstado" formControlName="martes_f">
+                <option *ngFor="let h of horas" [value]="h.h">{{h.h}}</option>
+              </select>
+            </div>   
+          </div>  
+          <div class="row">  
+            <strong style="text-align: center;width: 100%;">Miercoles</strong><br>
+          </div> 
+          <div class="row">
+            <div class="col-md-6"><strong style="text-align: left;width: 100%;">Inicio:</strong>
+              <select class="form-control" id="exampleInputEstado"  formControlName="miercoles_i">
+                <option *ngFor="let h of horas" [value]="h.h">{{h.h}}</option>
+              </select>
+            </div>
+            <div class="col-md-6"><strong style="text-align: left;width: 100%;">Fin:</strong>
+              <select class="form-control" id="exampleInputEstado"  formControlName="miercoles_f">
+                <option *ngFor="let h of horas" [value]="h.h">{{h.h}}</option>
+              </select>
+            </div>   
+          </div> 
+          <div class="row">  
+            <strong style="text-align: center;width: 100%;">Jueves</strong><br> 
+          </div>
+          <div class="row">
+            <div class="col-md-6"><strong style="text-align: left;width: 100%;">Inicio:</strong>
+              <select class="form-control" id="exampleInputEstado" formControlName="jueves_i">
+                <option *ngFor="let h of horas" [value]="h.h">{{h.h}}</option>
+              </select>
+            </div>
+            <div class="col-md-6"><strong style="text-align: left;width: 100%;">Fin:</strong>
+              <select class="form-control" id="exampleInputEstado" formControlName="jueves_f">
+                <option *ngFor="let h of horas" [value]="h.h">{{h.h}}</option>
+              </select>
+            </div>   
+          </div> 
+          <div class="row">  
+            <strong style="text-align: center;width: 100%;">Viernes</strong><br> 
+          </div>
+          <div class="row">
+            <div class="col-md-6"><strong style="text-align: left;width: 100%;">Inicio:</strong>
+              <select class="form-control" id="exampleInputEstado" formControlName="viernes_i">
+                <option *ngFor="let h of horas" [value]="h.h">{{h.h}}</option>
+              </select>
+            </div>
+            <div class="col-md-6"><strong style="text-align: left;width: 100%;">Fin:</strong>
+              <select class="form-control" id="exampleInputEstado" formControlName="viernes_f">
+                <option *ngFor="let h of horas" [value]="h.h">{{h.h}}</option>
+              </select>
+            </div>   
+          </div>
+
+          <div class="row">  
+            <strong  style="text-align: center;width: 100%;">Sabado</strong><br> 
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <strong style="text-align: left;width: 100%;">Inicio:</strong>
+              <select class="form-control" id="exampleInputEstado"  formControlName="sabado_i">
+                <option *ngFor="let h of horas" [value]="h.h">{{h.h}}</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <strong style="text-align: left;width: 100%;">Fin:</strong>
+              <select class="form-control" id="exampleInputEstado"  formControlName="sabado_f">
+                <option *ngFor="let h of horas" [value]="h.h">{{h.h}}</option>
+              </select>
+            </div>   
+          </div> 
+
+          <div class="row">  
+            <strong  style="text-align: center;width: 100%;">Domingo</strong><br> 
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <strong style="text-align: left;width: 100%;">Inicio:</strong>
+              <select class="form-control" id="exampleInputEstado" formControlName="domingo_i">
+                <option *ngFor="let h of horas" [value]="h.h">{{h.h}}</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <strong style="text-align: left;width: 100%;">Fin:</strong>
+              <select class="form-control" id="exampleInputEstado" formControlName="domingo_f">
+                <option *ngFor="let h of horas" [value]="h.h">{{h.h}}</option>
+              </select>
+            </div>   
+          </div>  
+          <br>
+          <button type="submit" class="btn btn-info" (click)="crear()" [disabled]="myFormAgregar.invalid">Agregar</button>
+        </form>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
+
+<toaster-container [toasterconfig]="config"></toaster-container>
+
+<div class="my-container">
+    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
+</div>

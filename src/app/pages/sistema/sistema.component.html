@@ -1,0 +1,100 @@
+<div class="row">
+  <div class="col-lg-6" style="display:block; margin:auto">
+  
+    <nb-card>
+      <nb-card-header>Costo por Km</nb-card-header>
+      <nb-card-body>
+        <div class="input-group">
+          <input type="number" class="form-control" placeholder="Costo" [(ngModel)]="costoxkm" id="input-costoxkm" min="0">
+          <span class="input-group-btn">
+            <button class="btn btn-danger">
+              $ MXN
+            </button>
+          </span>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-success" (click)="configurarSist()">Aceptar</button>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-6" style="display:block; margin:auto">
+  
+    <nb-card>
+      <nb-card-header>Costos de envío</nb-card-header>
+      <nb-card-body>
+        <div class="input-group">
+          <input type="number" class="form-control" placeholder="Costo" [(ngModel)]="gastos_envio" id="input-gastos_envio" min="0">
+          <span class="input-group-btn">
+            <button class="btn btn-danger">
+              $ MXN
+            </button>
+          </span>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-success" (click)="configurarSist2()">Aceptar</button>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-9" style="display:block; margin:auto">
+  
+    <nb-card>
+      <nb-card-header>Slider</nb-card-header>
+      <nb-card-body>
+        <div class="">
+          <div class="row">
+            <div class="col-md-12">
+              <br>
+              <label for="imagen">Imagen</label>
+              <input [hidden]="clear" type="file" name="imagen" id="imagen" (change)="onFileChange($event)" #fileInput accept="image/*">
+              <br><br>
+
+            </div>
+
+            <div class="col-md-12">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Archivo</th>
+                    <th>Acción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of slider; index as i">
+                    <td style="text-align: center; vertical-align:middle;">
+                      <!-- <a href="{{item.url}}" target="_blank">
+                        <i class="fa fa-{{item.icono}} fa-lg"> archivo</i>
+                      </a> -->
+                      <img src="{{item.url}}" alt="" width="200" height="200">
+                    </td>
+                    <td style="text-align: center; vertical-align:middle;">
+                      <!-- <a class="btn btn-sm btn-outline-success" href="{{item.url}}" download >*</a> -->
+                      <button type="button" class="btn btn-sm btn-outline-danger" (click)="clearImagen(i)" title="Eliminar">x</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+        
+
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
+
+
+<toaster-container [toasterconfig]="config"></toaster-container>
+
+<div class="my-container">
+    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
+</div>
+
+
