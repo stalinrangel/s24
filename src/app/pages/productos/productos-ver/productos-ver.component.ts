@@ -247,7 +247,7 @@ export class ProductosVerComponent implements OnInit{
       this.myFormEditar.patchValue({nombre : this.objAEditar.nombre});
       this.myFormEditar.patchValue({precio : this.objAEditar.precio});
       this.myFormEditar.patchValue({descripcion : this.objAEditar.descripcion});
-      //this.myFormEditar.patchValue({imagen : this.objAEditar.imagen});
+      this.myFormEditar.patchValue({imagen : this.objAEditar.imagen});
       this.myFormEditar.patchValue({subcategoria_id : this.objAEditar.subcategoria_id});
       this.myFormEditar.patchValue({establecimiento_id : this.objAEditar.establecimiento_id});
     }
